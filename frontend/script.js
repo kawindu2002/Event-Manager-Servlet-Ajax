@@ -10,7 +10,8 @@ const $saveEventBtn = $('#saveEventBtn');
 const $updateEventBtn = $('#updateEventBtn');
 const $deleteEventBtn = $('#deleteEventBtn');
 const $resetEventBtn = $('#resetEventBtn');
-// const apiUrl = 'http://localhost:8080/App01_Web_exploded/event';
+
+const apiUrl = 'http://localhost:8080/Event_Manager_Servlet_Ajax_Web_exploded/event';
 
 //WE CALL THIS READY FUNCTION WHEN PAGE IS LOADED
 $(document).ready(function () {
@@ -99,7 +100,6 @@ function resetEventForm() {
         // $itemForm.find('input, textarea').prop('disabled', false);
         // $itemCodeInput.prop('disabled', true);
         //
-        loadEvents();
 }
 
 
