@@ -152,7 +152,6 @@ function updateEvent() {
 }
 
 
-
 // Function to delete items
 function deleteEvent() {
 
@@ -173,7 +172,6 @@ function deleteEvent() {
         }
         
 }
-
 
 //Button click bindings
 
