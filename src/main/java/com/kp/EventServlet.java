@@ -42,6 +42,10 @@ public class EventServlet extends HttpServlet {
           
 //        Java will automatically close connection, stmt, and resultSet after use.
 //        If not.When we refresh the page multiple times, Data will not load to table due to the leak of connection
+          
+          // Don't use cache (don’t keep a copy of this response.) and Always ask me again when refreshing
+          resp.setHeader("Cache-Control", "no-store");
+          
           try (
                Connection connection = datasource.getConnection();
                PreparedStatement stmt = connection.prepareStatement("SELECT * FROM event");

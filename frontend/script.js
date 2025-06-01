@@ -45,7 +45,7 @@ function loadEventsTable(response) {
                                     <td>${event.edate}</td>
                                     <td>${event.eplace}</td>
                                     <td>
-                                        <button class="update-btn" id="EditEventBtn"><i class="fas fa-edit"></i> Edit</button>
+                                        <button class="update-btn EditEventBtn"><i class="fas fa-edit"></i> Edit</button>
                                     </td>
                                 </tr>
                         `;
@@ -57,11 +57,12 @@ function loadEventsTable(response) {
 
 // FUNCTION TO ADD LISTENERS TO EDIT BTN
 function addEventTableListeners() {
-        $eventTableBody.find('#EditEventBtn').on('click', function () {
+        $eventTableBody.find('.EditEventBtn').on('click', function () {
                 // FIND THE TABLE ROW OF EDIT BTN
                 const $row = $(this).closest('tr');
                 // GETS ALL THE DATA VALUES FROM THAT ROW & FILL THE FORM WITH THIS EVENT'S DATA.
-                populateEventForm($row.data());
+                populateEventForm($row.data('event'));
+                
         });
 }
 
@@ -158,10 +159,8 @@ function deleteEvent() {
         const idToDelete = $eventIdInput.val();
         if (confirm("Are you sure you want to delete this event?")) {
                 $.ajax({
-                        url: apiUrl,
+                        url: apiUrl + "?eid=" + idToDelete,
                         method: 'DELETE',
-                        contentType: 'application/json',
-                        data: JSON.stringify({eid: idToDelete}),
                         success: function () {
                                 alert('Event deleted');
                                 loadEvents();
