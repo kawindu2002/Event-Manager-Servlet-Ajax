@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Event Manager</title>
+
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+</head>
+<body>
+
+<h1>Event Management Form</h1>
+
+<form id="eventForm">
+  <div>
+    <label for="eid">Event ID</label>
+    <input type="text" id="eid" name="eid" required>
+  </div>
+  <div>
+    <label for="ename">Event Name</label>
+    <input type="text" id="ename" name="ename" required>
+  </div>
+  <div>
+    <label for="edescription">Description</label>
+    <textarea id="edescription" name="edescription" rows="3"></textarea>
+  </div>
+  <div>
+    <label for="edate">Event Date</label>
+    <input type="date" id="edate" name="edate" required>
+  </div>
+  <div>
+    <label for="eplace">Place</label>
+    <input type="text" id="eplace" name="eplace" required>
+  </div>
+  <div class="buttons">
+    <button type="button" class="save-btn" id="saveEventBtn"><i class="fas fa-save"></i> Save</button>
+    <button type="button" class="update-btn" id="updateEventBtn" ><i class="fas fa-edit"></i> Update</button>
+    <button type="button" class="delete-btn" id="deleteEventBtn" ><i class="fas fa-trash-alt"></i> Delete</button>
+    <button type="button" class="reset-btn" id="resetEventBtn"><i class="fas fa-sync-alt"></i> Reset</button>
+
+  </div>
+
+</form>
+
+<h2>Event List</h2>
+<table id="eventTable">
+  <thead>
+  <tr>
+    <th>Event ID</th>
+    <th>Name</th>
+    <th>Description</th>
+    <th>Date</th>
+    <th>Place</th>
+    <th>Actions</th>
+  </tr>
+  </thead>
+  <tbody id="eventTableBody"></tbody>
+</table>
+
+<script src="script.js"></script>
+<script src="jquery-3.7.1.min.js"></script>
+
+</body>
+</html>
+
