@@ -64,3 +64,8 @@ th {
     background-color: #1c4809;
     color: white;
 }
+
+p{
+    text-align: center;
+    font-weight: bold;
+}

@@ -25,7 +25,7 @@ public class EventServlet extends HttpServlet {
      @Override
      public void init() throws ServletException {
           datasource = new BasicDataSource();
-          datasource.setDriverClassName("com.mysql.jdbc.Driver");
+          datasource.setDriverClassName("com.mysql.cj.jdbc.Driver");
           datasource.setUrl("jdbc:mysql://localhost:3306/eventdb");
           datasource.setUsername("root");
           datasource.setPassword("Ijse@1234");
@@ -36,30 +36,30 @@ public class EventServlet extends HttpServlet {
      
      @Override
      protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+     
+          List<Map<String, String>> elist = new ArrayList<>();
+          ObjectMapper mapper = new ObjectMapper();
           
-          try {
-               Class.forName("com.mysql.cj.jdbc.Driver");
+//        Java will automatically close connection, stmt, and resultSet after use.
+//        If not.When we refresh the page multiple times, Data will not load to table due to the leak of connection
+          try (
                Connection connection = datasource.getConnection();
-               ResultSet resultSet = connection
-                    .prepareStatement("select * from event").executeQuery();
-               List<Map<String, String>> elist = new ArrayList<>();
-               while (resultSet.next()) {
-                    
-                    Map<String, String> event = new HashMap<String, String>();
-                    event.put("eid", resultSet.getString("eid"));
-                    event.put("ename", resultSet.getString("ename"));
-                    event.put("edescription", resultSet.getString("edescription"));
-                    event.put("edate", resultSet.getString("edate"));
-                    event.put("eplace", resultSet.getString("eplace"));
-                    elist.add(event);
-               }
-               resp.setContentType("application/json");
-               ObjectMapper mapper = new ObjectMapper();
-               mapper.writeValue(resp.getWriter(), elist);
-               
-               
-          } catch (ClassNotFoundException e) {
-               throw new RuntimeException(e);
+               PreparedStatement stmt = connection.prepareStatement("SELECT * FROM event");
+               ResultSet resultSet = stmt.executeQuery()
+          ) {
+          while (resultSet.next()) {
+               Map<String, String> event = new HashMap<>();
+               event.put("eid", resultSet.getString("eid"));
+               event.put("ename", resultSet.getString("ename"));
+               event.put("edescription", resultSet.getString("edescription"));
+               event.put("edate", resultSet.getString("edate"));
+               event.put("eplace", resultSet.getString("eplace"));
+               elist.add(event);
+          }
+          
+          resp.setContentType("application/json");
+          mapper.writeValue(resp.getWriter(), elist);
+          
           } catch (SQLException e) {
                throw new RuntimeException(e);
           }
@@ -71,19 +71,17 @@ public class EventServlet extends HttpServlet {
           ObjectMapper mapper = new ObjectMapper();
           Map<String, String> event = mapper.readValue(req.getInputStream(), Map.class);
           
-          try {
-               Class.forName("com.mysql.cj.jdbc.Driver");
+          try (
                Connection connection = datasource.getConnection();
-               
-               PreparedStatement stmt = connection.prepareStatement(
-                    "INSERT INTO event (eid,ename, edescription, edate, eplace) VALUES (?, ?, ?, ?,?)"
-               );
+               PreparedStatement stmt = connection.prepareStatement("INSERT INTO event (eid, ename, edescription, edate, eplace) VALUES (?, ?, ?, ?, ?)");
+          
+          ){
                stmt.setString(1, event.get("eid"));
                stmt.setString(2, event.get("ename"));
                stmt.setString(3, event.get("edescription"));
                stmt.setString(4, event.get("edate"));
                stmt.setString(5, event.get("eplace"));
-               
+          
                int rows = stmt.executeUpdate();
                resp.setContentType("application/json");
                mapper.writeValue(resp.getWriter(), rows);
@@ -99,13 +97,10 @@ public class EventServlet extends HttpServlet {
           ObjectMapper mapper = new ObjectMapper();
           Map<String, String> event = mapper.readValue(req.getInputStream(), Map.class);
           
-          try {
-               Class.forName("com.mysql.cj.jdbc.Driver");
+          try (
                Connection connection = datasource.getConnection();
-               
-               PreparedStatement stmt = connection.prepareStatement(
-                    "UPDATE event SET ename = ?, edescription = ?, edate = ?, eplace = ? WHERE eid = ?"
-               );
+               PreparedStatement stmt = connection.prepareStatement("UPDATE event SET ename = ?, edescription = ?, edate = ?, eplace = ? WHERE eid = ?")
+          ){
                stmt.setString(1, event.get("ename"));
                stmt.setString(2, event.get("edescription"));
                stmt.setString(3, event.get("edate"));
@@ -124,26 +119,21 @@ public class EventServlet extends HttpServlet {
      
      @Override
      protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-        /*ObjectMapper mapper = new ObjectMapper();
-        Map<String, String> body = mapper.readValue(req.getInputStream(), Map.class);
-        String eid = body.get("eid");*/
           String eid = req.getParameter("eid");
           
-          try {
-               Class.forName("com.mysql.cj.jdbc.Driver");
+          try (
                Connection connection = datasource.getConnection();
-               
-               PreparedStatement stmt = connection.prepareStatement("DELETE FROM event WHERE eid = ?");
+               PreparedStatement stmt = connection.prepareStatement("DELETE FROM event WHERE eid = ?")
+          ) {
                stmt.setString(1, eid);
                
                int rows = stmt.executeUpdate();
                resp.setContentType("application/json");
-               //mapper.writeValue(resp.getWriter(), rows);
                resp.getWriter().write("success");
-               
+          
           } catch (Exception e) {
                throw new RuntimeException(e);
           }
      }
 }
+
