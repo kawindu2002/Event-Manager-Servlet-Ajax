@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.dbcp2.BasicDataSource;
 
 import java.io.IOException;
 import java.sql.*;
@@ -19,16 +20,26 @@ import java.util.Map;
 @WebServlet("/event")
 public class EventServlet extends HttpServlet {
      
+     private BasicDataSource datasource;
+     
      @Override
-     protected void doOptions(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+     public void init() throws ServletException {
+          datasource = new BasicDataSource();
+          datasource.setDriverClassName("com.mysql.jdbc.Driver");
+          datasource.setUrl("jdbc:mysql://localhost:3306/eventdb");
+          datasource.setUsername("root");
+          datasource.setPassword("Ijse@1234");
+          datasource.setInitialSize(5);
+          datasource.setMaxTotal(5);
      }
+     
      
      @Override
      protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
           
           try {
                Class.forName("com.mysql.cj.jdbc.Driver");
-               Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/eventdb", "root", "Ijse@1234");
+               Connection connection = datasource.getConnection();
                ResultSet resultSet = connection
                     .prepareStatement("select * from event").executeQuery();
                List<Map<String, String>> elist = new ArrayList<>();
@@ -62,7 +73,7 @@ public class EventServlet extends HttpServlet {
           
           try {
                Class.forName("com.mysql.cj.jdbc.Driver");
-               Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/eventdb", "root", "Ijse@1234");
+               Connection connection = datasource.getConnection();
                
                PreparedStatement stmt = connection.prepareStatement(
                     "INSERT INTO event (eid,ename, edescription, edate, eplace) VALUES (?, ?, ?, ?,?)"
@@ -90,7 +101,7 @@ public class EventServlet extends HttpServlet {
           
           try {
                Class.forName("com.mysql.cj.jdbc.Driver");
-               Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/eventdb", "root", "Ijse@1234");
+               Connection connection = datasource.getConnection();
                
                PreparedStatement stmt = connection.prepareStatement(
                     "UPDATE event SET ename = ?, edescription = ?, edate = ?, eplace = ? WHERE eid = ?"
@@ -118,23 +129,21 @@ public class EventServlet extends HttpServlet {
         Map<String, String> body = mapper.readValue(req.getInputStream(), Map.class);
         String eid = body.get("eid");*/
           String eid = req.getParameter("eid");
-
+          
           try {
                Class.forName("com.mysql.cj.jdbc.Driver");
-               Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/eventdb", "root", "Ijse@1234");
-
+               Connection connection = datasource.getConnection();
+               
                PreparedStatement stmt = connection.prepareStatement("DELETE FROM event WHERE eid = ?");
                stmt.setString(1, eid);
-
+               
                int rows = stmt.executeUpdate();
                resp.setContentType("application/json");
                //mapper.writeValue(resp.getWriter(), rows);
                resp.getWriter().write("success");
-
+               
           } catch (Exception e) {
                throw new RuntimeException(e);
           }
      }
 }
-
-

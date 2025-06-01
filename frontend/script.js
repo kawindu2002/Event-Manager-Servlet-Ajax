@@ -74,32 +74,11 @@ function populateEventForm(data) {
         $eventDateInput.val(data.edate);
         $eventPlaceInput.val(data.eplace);
         
-        // //Manage button status
-        // $saveItemBtn.prop('disabled', true);
-        // $updateItemBtn.prop('disabled', false);
-        // $deleteItemBtn.prop('disabled', false);
-        
-        // //Enable form inputs and textareas
-        // $itemForm.find('input, textarea').prop('disabled', false);
-        // $itemCodeInput.prop('disabled', true);
-        //
 }
 
 // Function to reset item form
 function resetEventForm() {
         $eventForm[0].reset();
-        // Make $itemIdInput empty
-        // $itemCodeInput.val(getNextItemCode());
-        
-        //Manage button status
-        // $saveItemBtn.prop('disabled', false);
-        // $updateItemBtn.prop('disabled', true);
-        // $deleteItemBtn.prop('disabled', true);
-        //
-        //Enable form inputs and textareas
-        // $itemForm.find('input, textarea').prop('disabled', false);
-        // $itemCodeInput.prop('disabled', true);
-        //
 }
 
 
