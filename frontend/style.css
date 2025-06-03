@@ -42,6 +42,7 @@ button {
     cursor: pointer;
     font-weight: bold;
 }
+
 .save-btn { background-color: #031c86; }
 .update-btn { background-color: #e78a24; }
 .delete-btn { background-color: #dc3545; }

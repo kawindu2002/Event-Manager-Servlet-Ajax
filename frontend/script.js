@@ -31,6 +31,20 @@ function loadEvents() {
         });
 }
 
+function saveBtnEnable(){
+        $updateEventBtn.prop('disabled', true).css('opacity', '0.5');
+        $deleteEventBtn.prop('disabled', true).css('opacity', '0.5');
+        $saveEventBtn.prop('disabled', false).css('opacity', '1');
+}
+
+function saveBtnDisable(){
+        $saveEventBtn.prop('disabled', true).css('opacity', '0.5');
+        $updateEventBtn.prop('disabled', false).css('opacity', '1');
+        $deleteEventBtn.prop('disabled', false).css('opacity', '1');
+        
+        
+}
+
 //THIS FUNCTION WILL LOAD THE DATA INTO TABLES
 function loadEventsTable(response) {
         $eventForm[0].reset();
@@ -68,6 +82,7 @@ function addEventTableListeners() {
 
 // FUNCTION TO ADD TABLE DATA TO INPUT FIELDS
 function populateEventForm(data) {
+        saveBtnDisable();
         // INSERT DATA INTO FIELDS
         $eventIdInput.val(data.eid);
         $eventNameInput.val(data.ename);
@@ -80,6 +95,7 @@ function populateEventForm(data) {
 // Function to reset item form
 function resetEventForm() {
         $eventForm[0].reset();
+        saveBtnEnable();
 }
 
 
