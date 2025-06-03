@@ -35,13 +35,13 @@ function saveBtnEnable(){
         $updateEventBtn.prop('disabled', true).css('opacity', '0.5');
         $deleteEventBtn.prop('disabled', true).css('opacity', '0.5');
         $saveEventBtn.prop('disabled', false).css('opacity', '1');
+        
 }
 
 function saveBtnDisable(){
         $saveEventBtn.prop('disabled', true).css('opacity', '0.5');
         $updateEventBtn.prop('disabled', false).css('opacity', '1');
         $deleteEventBtn.prop('disabled', false).css('opacity', '1');
-        
         
 }
 
