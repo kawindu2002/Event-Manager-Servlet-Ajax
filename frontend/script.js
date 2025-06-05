@@ -10,11 +10,12 @@ const $saveEventBtn = $('#saveEventBtn');
 const $updateEventBtn = $('#updateEventBtn');
 const $deleteEventBtn = $('#deleteEventBtn');
 const $resetEventBtn = $('#resetEventBtn');
+const $document = $(document);
 
 const apiUrl = 'http://localhost:8080/Event_Manager_Servlet_Ajax_Web_exploded/event';
 
 //WE CALL THIS READY FUNCTION WHEN PAGE IS LOADED
-$(document).ready(function () {
+$document.ready(function () {
         resetEventForm();
         loadEvents();
 });
@@ -35,13 +36,13 @@ function saveBtnEnable(){
         $updateEventBtn.prop('disabled', true).css('opacity', '0.5');
         $deleteEventBtn.prop('disabled', true).css('opacity', '0.5');
         $saveEventBtn.prop('disabled', false).css('opacity', '1');
-        
 }
 
 function saveBtnDisable(){
         $saveEventBtn.prop('disabled', true).css('opacity', '0.5');
         $updateEventBtn.prop('disabled', false).css('opacity', '1');
         $deleteEventBtn.prop('disabled', false).css('opacity', '1');
+        
         
 }
 
@@ -97,7 +98,6 @@ function resetEventForm() {
         $eventForm[0].reset();
         saveBtnEnable();
 }
-
 
 // FUNCTION TO SAVE AN EVENT
 function saveEvent() {
